@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HW9-萬年曆</title>
+<meta charset="utf-8">
+<style type="text/css">
+	body {font-family:"微軟正黑體"; font-size: 150%;background-color: #F2F2F2; color:white; user-select: none;}
+	#divYM {width: 100%; min-width: 570px;
+		 margin-top:50px;
+		 text-align: center;
+		 position: relative;
+	}
+	#divYM span{ width: 150px; height:50px; line-height: 50px; vertical-align: middle;
+		 		display: inline-block; text-align: center;
+	}
+	.btn {cursor:pointer; color: black;}
+	#calender {width: 567px; height:350px; min-width: 567px;
+		 margin-top:5px;
+		 text-align: center;
+		 position: relative; margin:0 auto;
+		 background-color: #2D2D2D; border-radius: 0.7em;
+	}
+	.divCal {height:50px; line-height: 50px; vertical-align: middle;}
+	#calDays {font-weight: bold; font-size: 120%; }
+	.divCal span {width: 81px; height: 50px;
+		 display: inline-block; text-align: center; border-radius: 0.3em;
+		 cursor: pointer;
+	}
+	#today {color: deeppink; font-weight: bold;}
+	.outter {color: #696969;}
+</style>
+
+
+<script type="text/javascript">
+	//return how many days of this month
+	function monthDays(date){
+		var shortMonth = new Array(4,6,9,11);
+
+		if(date.getMonth()==1){ //case of Feb
+			var year = date.getFullYear();
+			if(year%400 == 0){
+				return 29;
+			}else if(year%100==0){
+				return 28;
+			}else if(year%4==0){
+				return 29;
+			}else{
+				return 28;
+			}
+		}else if(shortMonth.indexOf(date.getMonth()+1) != -1){ //case of shortMonth
+			return 30;
+		}else{ //case of longMonth
+			return 31;
+		}
+	}
+	//return how many days of last month
+	function lastMonthDays(date){
+		date.setMonth(date.getMonth()-1);
+		lastM = monthDays(date);
+		date.setMonth(date.getMonth()+1);
+		return lastM;
+	}
+	//return what Day of 1st of this month
+	function firstDayOfMonth(date){
+		var today = date.getDate();
+		date.setDate(1);
+		var firstDay = date.getDay();
+		if(firstDay==0){
+			firstDay = 7;
+		}
+		date.setDate(today);
+		return firstDay;
+	}
+	//calender printer
+	function calPrinter(date){
+		document.getElementById('showM').innerHTML=date.getFullYear()+'年'+
+													(date.getMonth()+1)+'月';
+		var today = date.getDate();
+		var start = firstDayOfMonth(date);
+		var	lenOfThis = monthDays(date);
+		var lenOfLast = lastMonthDays(date);
+		var strTmp = '';
+		var now = new Date();
+		if(date.getFullYear() != now.getFullYear() || date.getMonth()!=now.getMonth()){
+			today = -1;
+		}
+		//lastMonth
+		for(var i =1; i<=start; i++){
+			strTmp = strTmp + '<span class="outter">'+(lenOfLast-(start-i))+'</span>';
+			if((i)%7==0){
+				strTmp = strTmp + '</div><div class="divCal">';
+			}
+		}
+		//thisMonth
+		for(var i = 1; i<=lenOfThis; i++){
+			strTmp = strTmp + '<span class="inner" ';
+			if(i==today){
+				strTmp = strTmp + 'id="today"';
+			}
+			strTmp = strTmp + '>'+ i +'</span>';
+			if((i+start)%7==0){
+				strTmp = strTmp + '</div><div class="divCal">';
+			}
+		}
+		//nextMonth
+		for(var i =start+lenOfThis+1; i<= 42; i++){
+			strTmp = strTmp + '<span class="outter">'+(i-(start+lenOfThis))+'</span>';
+			if(i%7==0 && i!=42){
+				strTmp = strTmp + '</div><div>';
+			}
+		}
+		document.getElementById('calIn').innerHTML = strTmp;
+	}
+	//previous month 
+	function preM(){
+		var newM = date.getMonth()-1;
+		date.setMonth(newM);
+		init();
+	}
+	//next month
+	function nexM(){
+		var newM = date.getMonth()+1;
+		date.setMonth(newM);
+		init();
+	}
+	function thisM(){
+		date = new Date();
+		init();
+	}
+
+	//*****************Animation*****************
+	var moveOverC =	'#DDDDDD';
+	var moveOutC = '';
+	var selectC = '#B4B4B4';
+	var fontC= '#0070C9';
+	//onmouseOver
+	function hightlight(e){
+		e.target.style.color = fontC;
+		e.target.style.backgroundColor = moveOverC;
+	}
+	//normal
+	function normal(e){
+		e.target.style.color = '';
+		e.target.style.backgroundColor = moveOutC;
+	}
+	//select
+	function select(e){
+		e.target.style.backgroundColor = selectC;
+	}
+
+	//***************initial*****************
+	var date = new Date();
+	function init(){
+		calPrinter(date);
+		document.getElementById('btnPre').onclick=preM;
+		document.getElementById('btnNex').onclick=nexM;
+		document.getElementById('showM').onclick=thisM;
+		var span =document.querySelectorAll('.inner');
+		for(var i = 0; i<span.length; i++){
+			span[i].onmouseover = hightlight;
+			span[i].onmouseout = normal;
+			span[i].onmousedown = select;
+			span[i].onmouseup = hightlight;
+		}
+		var btn = document.querySelectorAll('.btn');
+		for(var i = 0; i<btn.length; i++){
+			btn[i].onmouseover = function(e){e.target.style.color = fontC;};
+			btn[i].onmouseout = function(e){e.target.style.color = '';};
+		}
+	}
+	window.onload = init;
+</script>
+</head>
+<body>
+	<div id="divYM">
+		<span class="btn" id="btnPre">◀</span>
+		<span class="btn" id="showM"></span>
+		<span class="btn" id="btnNex">▶</span>
+	</div>
+
+	<div class="divCal" id="calender">
+	    <div class="divCal" id="calDays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+	    <div class="divCal" id="calIn"></div>
+    </div>
+</body>
+</html>

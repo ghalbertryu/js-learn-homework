@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HW7-顏文字</title>
+<meta charset="utf-8">
+<style type="text/css">
+	body {font-family:"微軟正黑體"; background-color: #F2F2F2;}
+	#divBtn {width: 100%;
+		 	position:absolute; top:70px;
+		 	text-align: center;
+		 	font-size: 150%;
+	}
+	.btn {cursor: pointer;}
+	#divDisplay {width: 100%; text-align: center;
+				position: absolute; top:30%;
+				font-size: 1000%; 		
+	}
+	#spanDisplay {background-color: lightblue;
+	}
+</style>
+
+<script type="text/javascript">
+	function show(e){
+		var elm = e.target;
+		document.getElementById('spanDisplay').style.backgroundColor = elm.style.backgroundColor;
+		document.getElementById('spanDisplay').innerHTML = elm.innerHTML;
+	}
+
+	function init(){
+		var btn = document.querySelectorAll('.btn');
+		for(var i = 0; i < btn.length; i++){
+			btn[i].onclick = show;
+		}
+	}
+
+	window.onload = init;
+</script>
+</head>
+<body>
+	<div id="divBtn">
+	<span class="btn" style="background-color: pink">(*´∀`)~♥</span>
+	<span class="btn" style="background-color: yellow">(✪ω✪)</span>
+	<span class="btn" style="background-color: orange">(๑´ڡ`๑)</span>
+	<span class="btn" style="background-color: #8080ff">─=≡Σ((( つ•̀ω•́)つ</span>
+	<span class="btn" style="background-color: gold">(◔⊖◔)つ</span>
+	<span class="btn" style="background-color: #00b300">(☉д⊙)</span>
+	<span class="btn" style="background-color: #cc3300">(ノ▼Д▼)ノ</span>
+	</div>
+    <div id="divDisplay">
+    <span id="spanDisplay">^____^</span>
+    </div>
+</body>
+</html>

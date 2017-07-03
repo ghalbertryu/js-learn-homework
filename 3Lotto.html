@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>HW3-Lotto</title>
+	<style type="text/css">
+		body {background-color: #F2F2F2;}
+		h1 {text-align: center;
+			color: #EA7000;
+			font-family:"微軟正黑體"; font-weight: Bold;}
+		td {background-image: url("./images/ballY.png");
+			width:70px; height: 70px; 
+			color: #0C1177;
+			text-align: center;
+			font-size: 200%;
+			font-family:"Century";
+			font-weight:Bold;
+		}
+		input  {position: absolute; 
+				width: 70px;
+				height: 23px;
+				margin: 20px 0 0 -35px;
+				left: 50%;
+		}
+	</style>
+</head>
+
+<body>
+<script type="text/javascript">
+
+	function hightlight(){
+		obj = event.srcElement;
+		obj.style.backgroundImage = 'url("./images/ballR.png")';
+	}
+	function normal(){
+		obj = event.srcElement;
+		obj.style.backgroundImage = 'url("./images/ballY.png")';
+	}
+	//return an array saving random lotto numbers
+	function lotto(array, maxNum) {
+		for(var i = 0; i < array.length; i++){
+			var tmp = Math.ceil((maxNum * Math.random()));
+			if(array.indexOf(tmp) != -1){
+				return lotto(array, maxNum);
+			}
+			array[i] = tmp;	
+		}
+		array.sort(function(a, b){return a-b});
+		return array;
+	}
+	//generate a Lotto set and show
+	function random() {
+		var size =6;
+		var maxNum = 49;
+		var lottoNums = new Array(size);
+		lottoNums = lotto(lottoNums, maxNum);
+
+		var tmpString = "";
+		for(var i = 0; i < lottoNums.length; i++){
+			tmpString = tmpString + '<td>'+lottoNums[i]+'</td>';
+		}
+		var tdLotto = document.getElementById("lotto");
+		tdLotto.innerHTML =	tmpString;	
+	}
+	window.onload = random;
+</script>
+
+<h1>大樂透1~49隨機取6個號碼</h1>
+<table align = "center" cellspacing="0" onmouseover = hightlight() onmouseout = normal()>
+<tr id="lotto">
+<!-- Lotto results show here -->
+</tr>
+</table>
+
+<input type="button" name="random" value = "隨機選號" onClick=random()>
+
+</body>
+</html>

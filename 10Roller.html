@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HW10-守護神籤</title>
+<meta charset="utf-8">
+<style type="text/css">
+	body {font-family:"微軟正黑體"; background-color: #eeeeee;}
+	#upper {width: 100%;
+		 margin-top:40px;
+		 text-align: center;
+	}
+	th { width: 50%; height: 50%; }
+	td { width: 25%; height: 25%; }
+	#lightBox {width:250px; height: 250px;
+				position: relative;
+	}
+	.show {width:100%; height:100%;
+				position: absolute;
+	}
+	#resultDiv {font-size: 150%; color: white;}
+	.btn {border-radius: 0.2em; border:0px; font-size: 120%;
+		background-color: #CD5637; color: #E5D9CC;
+		cursor: pointer;
+	}
+
+</style>
+
+</head>
+
+<body>
+	<div id = "upper"><input class = "btn" id="roll" type="button" value="召喚今日守護"></div>
+	<br><br>
+    <table border="1" align="center" width="500px" height="500px" cellspacing="0">
+    	<tr><td class="smallTd" id="td0"></td><td class="smallTd" id="td1"></td><td class="smallTd" id="td2"></td><td class="smallTd" id="td3"></td></tr>
+    	<tr><td class="smallTd" id="td11"></td>
+    	<th id="centerTh" colspan="2" rowspan="2"><div id="lightBox"><div id="show"></div></div></th>
+    	<td class="smallTd" id="td4"></td></tr>
+    	<tr><td class="smallTd" id="td10"></td><td class="smallTd" id="td5"></td></tr>
+    	<tr><td class="smallTd" id="td9"></td><td class="smallTd" id="td8"></td><td class="smallTd" id="td7"></td><td class="smallTd" id="td6"></td></tr>
+    </table>
+
+
+<script type="text/javascript">
+	//id selector
+	function $id(id){
+		return document.getElementById(id);
+	}
+	//class selector
+	function $cs(cs){
+		return document.getElementsByClassName(cs);
+	}
+	//random RGB String Ex: #ffcc11
+	function ranRgb(){
+		var r = Math.floor(256*Math.random());
+		var g = Math.floor(256*Math.random());
+		var b = Math.floor(256*Math.random());
+		if(r+g+b < 400){
+			return ranRgb();
+		}
+		r = r.toString(16);
+		g = g.toString(16);
+		b = b.toString(16);
+		if(r.length<2) r='0'+r;
+		if(g.length<2) g='0'+g;
+		if(b.length<2) b='0'+b;
+		var rgb = "#"+r+g+b;
+		return rgb;
+	}
+	//random 1000~10000000
+	function ranPoint(){
+		return 1000*Math.floor(Math.random()*10001);
+	}
+
+	//roll function
+	var start;
+	var end=10;
+	var speed;
+	var rollerId;
+	function roll(){
+		if(start>end){
+			clearInterval(rollerId);
+			setTimeout(result,800);
+			return;
+		}
+
+		$id(('td'+(start+1)%12)).style.backgroundColor=ranRgb();
+		$id('show').innerHTML='<img src="./images/animals/'+((start+1)%12)+'c.png" width="250" height = "250">';
+		$id(('td'+(start)%12)).style.backgroundColor='white';
+
+		if(start%3==0){
+			speed = (start/3) * 8 + speed;
+			clearInterval(rollerId);
+			rollerId = setInterval(roll, speed);
+		}
+		start++;
+	}
+
+	function action(){
+		clearInterval(rollerId);
+		for(var i=0; i<12; i++){
+			$id(('td'+i)).style.backgroundColor='white';
+		}
+		$id('centerTh').style.backgroundColor ='';
+		$id('show').style.display = '';
+		if($id('resultDiv')!=undefined){
+			$id('lightBox').removeChild($id('resultDiv'));
+		}
+		start = Math.floor(Math.random()*12);
+		end = 30 + Math.floor(Math.random()*12);
+		speed = 50;
+		console.log((end+1)%12); //result
+		rollerId = setInterval(roll, speed);
+	}
+
+	var mythAml = new Array('猪神','犬神','靈鴞','蜜獾','玉兔','獅王','狐仙','化け狸','雲鼯鼠','シシ神','螺剌猬','貓神');
+	var ability = new Array('幹勁','好心情','靈感','食慾','可愛','霸氣','魅力','靈巧','行動力','元氣','戰鬥力','淡定')
+	function result(){
+		$id('show').style.display = 'none';
+		$id('centerTh').style.backgroundColor = '#CF112B';
+		var div = document.createElement('div');
+		div.setAttribute('id', 'resultDiv');
+		$id('lightBox').appendChild(div);
+		$id('resultDiv').innerHTML = '<table height="250px"><tr><td>'+'今日受到<br><br>'+
+									mythAml[(end+1)%12]+
+									' 的守護<br><br>'+
+									ability[(end+1)%12]+'： '+
+									ranPoint()+
+									'點</td></tr></table>';
+	}
+
+	//*********init***********
+	function init(){
+		for(var i=0; i<12; i++){
+			$id('td'+i).innerHTML = '<img src="./images/animals/'+i+'.png" width="125" height = "125">';
+			$id('td'+i).style.backgroundColor= 'white';
+		}
+		$id('roll').onclick=action;
+	}
+	window.onload = init;
+</script>
+</body>
+</html>

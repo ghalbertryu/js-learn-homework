@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HW8-身分證字號驗證產生器</title>
+<meta charset="utf-8">
+<style type="text/css">
+	body {font-family:"微軟正黑體"; background-color: #F2F2F2;}
+	div {width: 100%;
+		 margin-top:25px;
+		 text-align: center;
+		 font-size: 150%;
+	}
+    form {font-size: 15px;}
+	#ans {background-color: lightblue;
+		  margin-top:40px;
+		  font-size: 1250%;
+	}
+</style>
+</head>
+<body>
+	<div>身分證字號驗證及產生器</div>
+	<div>
+    	<form>
+            身分證字號
+	    	<input type="text" name="idInput" maxlength="10" placeholder="輸入欲驗證之身分證字號">
+	    	<input type="button" class="btn" id="btnCheck" value="Check">
+            <input type="button" class="btn" id="btnGen" value="Generate">
+    	</form>
+    </div>
+    <div id="ans">
+    	<!-- result shows here -->
+    </div>
+
+
+    <script type="text/javascript">
+    	window.onload = function(){
+    		document.querySelector('#btnCheck').onclick = btnCheck;
+    		document.querySelector('#btnGen').onclick = btnGen;
+    	};
+    	function btnCheck(){
+    		var input = document.getElementsByName('idInput')[0].value;
+    		if(idNumCheck(input)){
+    			document.getElementById('ans').innerHTML = '驗證合格';
+                document.getElementById('ans').style.backgroundColor= 'lightblue';
+    		}else{
+    			document.getElementById('ans').innerHTML = '驗證失敗';
+                document.getElementById('ans').style.backgroundColor= 'pink';
+    		}
+    	}
+    	function btnGen(){
+            document.getElementById('ans').innerHTML = idGenerator();
+            document.getElementById('ans').style.backgroundColor= 'lightgreen'
+    	}
+    	//***********************************************************************   	
+    	
+    	//check first character is valid
+    	function idCharToNum(char){
+    		char = char.toLowerCase();
+    		if(char<'a' || char>'z'){
+    			return false;
+    		}
+
+    		if(char>='a' && char<='h'){
+    			return (char.charCodeAt(0)-87).toString();
+    		}else if(char>='j' && char<='n'){
+    			return (char.charCodeAt(0)-88).toString();
+    		}else if(char>='p' && char<='v'){
+    			return (char.charCodeAt(0)-89).toString();
+    		}else if(char>='x' && char<='y'){
+    			return (char.charCodeAt(0)-90).toString();
+    		}else if(char=='i'){
+    			return '34';
+    		}else if(char=='o'){
+    			return '35';
+    		}else if(char=='w'){
+    			return '32';
+    		}else if(char=='z'){
+    			return '33';
+    		}else{
+    			return false;
+    		}
+    	}
+
+    	//check gender
+    	function idGender(num){
+            num = parseInt(num);
+    		if(num == 1){
+    			return 1;
+    		}else if(num == 2){
+    			return 2;
+    		}else{
+    			return false;
+    		}
+    	}
+
+    	function idNumCheck(idStr){
+    		var idArr = idStr.split('');
+    		var char;
+    		//check length
+    		if(idArr.length!=10){
+    			return false;
+    		}
+    		//check char
+    		if(!(char = idCharToNum(idArr[0]))){
+    			return false;
+    		}
+    		//check gender
+    		if(!idGender(idArr[1])){
+    			return false;
+    		}
+    		//check check number
+    		var sum;
+    		sum = parseInt(char.charAt(0))*1+parseInt(char.charAt(1))*9;
+    		for(var i=1; i<=8; i++){
+    			sum += parseInt(idArr[i])*(9-i);
+    		}
+    		if((sum + parseInt(idArr[9]))%10 == 0){
+    			return true;
+    		}else{
+    			return false;
+    		}
+    	}
+
+    	function idGenerator() {
+    		var char = String.fromCharCode(64+Math.floor(1+Math.random()*26));
+    		var gender = Math.floor(1+2*Math.random());
+    		var idInner = new Array(7);
+    		for(var i = 0; i < idInner.length; i++){
+    			idInner[i] = Math.floor(10*Math.random());
+    		}
+    		var idStr=char+gender;
+    		for(var i = 0; i < idInner.length; i++){
+    			idStr += idInner[i];
+    		}
+    		for(var i=0; i<10; i++){
+    			var gusId = idStr + i;
+    			if(idNumCheck(gusId)){
+    				return gusId;
+    			}
+    		}
+            return false;
+    	}
+    </script>
+</body>
+</html>

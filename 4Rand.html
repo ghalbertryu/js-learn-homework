@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HW4-Rand</title>
+<meta charset="utf-8">
+<style type="text/css">
+	body {font-family:"微軟正黑體"; background-color: #F2F2F2;}
+	div {width: 100%;
+		 margin-top:25px;
+		 text-align: center;
+		 font-size: 150%;
+	}
+    form {font-size: 15px;}
+	#ans {background-color: lightblue;
+		  margin-top:40px;
+		  font-size: 1250%;
+	}
+</style>
+</head>
+
+<body>
+    <script type="text/javascript">
+        //random an integer between min and max, then shows
+    	function randInt(min, max){
+    		var n1 = Math.ceil(min);
+    		var n2 = parseInt(max);
+    		var base = parseInt(Math.min(n1, n2));
+    		var ans = base + parseInt(Math.random() * (Math.abs(n2-n1)+1));
+    		if(isNaN(ans)) {
+    			document.getElementById('ans').style.backgroundColor = 'pink';
+    			document.getElementById('ans').innerHTML = '請<b>認真</b>輸入';
+    		}
+    		else{
+    			document.getElementById('ans').style.backgroundColor = 'lightblue';
+    			document.getElementById('ans').innerHTML = ''+ans+''; 
+    		}
+    	}
+    </script>
+
+	<div>亂數產生介於Num1和Num2兩數間之整數</div>
+	<div>
+    	<form>
+            Num1:
+	    	<input type="number" name="num1" placeholder="請輸入數字" min = "-99999" max ="99999">
+            Num2:
+	    	<input type="number" name="num2" placeholder="請輸入數字" min = "-99999" max ="99999">
+	    	<input type="button" value="Random" 
+	    		   onclick="randInt(document.getElementsByName('num1')[0].value,
+	    					document.getElementsByName('num2')[0].value)">
+    	</form>
+    </div>
+    <div id="ans">
+    	<!-- random number shows here -->
+    </div>
+</body>
+</html>
