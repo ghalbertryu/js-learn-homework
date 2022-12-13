@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>HW2-CaptchaGenerator</title>
+	<style type="text/css">
+		table {background-image: 
+			   url("http://letu.soundofhope.org/wp-content/uploads/2015/09/14416821677849.gif");
+		}
+		td {width: 40px; height: 60px;
+			text-align:center;
+			user-select: none;
+			cursor: default; 
+		}
+		span {position: absolute; 
+			width: 70px;
+			height: 23px;
+			margin: 10px 0 0 -35px;
+			left: 50%;
+			font-family:"微軟正黑體";
+			text-align: center;
+			text-decoration: underline;
+			text-decoration-color: #0070C9;
+			color: #0070C9;
+			user-select: none;
+			cursor:pointer
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		//return an array saving random numbers Range: 0~9
+		function ranNum(num){
+			var array = new Array(num);
+			for(var i = 0; i < array.length; i++){
+				array[i] = Math.floor((10*Math.random()));
+			}
+			return array;
+		}
+		//random RGB String Ex: #ffcc11
+		function ranRgb(){
+			var r = (Math.floor(256*Math.random())).toString(16);
+			var g = (Math.floor(256*Math.random())).toString(16);
+			var b = (Math.floor(256*Math.random())).toString(16);
+			if(r.length<2) r='0'+r;
+			if(g.length<2) g='0'+g;
+			if(b.length<2) b='0'+b;
+			var rgb = "#"+r+g+b;
+			return rgb;
+		}
+		//random percentage Range:100%~229%
+		function ranFontSize(){
+			return (100+(130*Math.random()))+'%';
+		}
+		//random font-weight Range:0~1
+		function ranFontWeight(){
+			fontWeight = ['bold', 'normal']
+			return fontWeight[Math.floor(2*Math.random())];
+		}
+		//random font-family Range:0~6
+		function ranFontFamily(){
+			fontFamily = ['Calibri', 'Algerian', 'Broadway', 'Freestyle Script',
+					  'Colonna MT', 'Viner Hand ITC', 'Jokerman'];
+			return fontFamily[Math.floor(7*Math.random())];
+		}
+		//random font-style Range:0~1
+		function ranFontStyle(){
+			fontStyle = ['Normal', 'Italic'];
+			return fontStyle[Math.floor(2*Math.random())];
+		}
+		//random text-decoration Range:0~2
+		function ranTextDecoration(){
+			textDecoration = ['none', 'none', 'line-through'];
+			return textDecoration[Math.floor(3*Math.random())];
+		}
+
+		//generate 4-digits code and show
+		function random(){
+			var nums = ranNum(4);
+			var tmpString = "";
+			for(var i = 0; i < nums.length; i++){
+				tmpString = tmpString + '<td style= "font-size: '+ranFontSize()+
+										'; font-weight:'+ranFontWeight()+
+										'; font-family:'+ranFontFamily()+
+										'; font-style'+ranFontStyle()+
+										'; text-decoration:'+ranTextDecoration()+
+										'; color: '+ranRgb()+
+										'; ">'+nums[i]+'</td>';
+			}
+			var trCode = document.getElementById("code");
+			trCode.innerHTML = tmpString;			
+		}
+		window.onload = random;
+	</script>
+
+	<table align = "center" cellspacing = "0">
+	<tr id="code">
+	<!-- put random codes here -->
+	</tr></table>
+	<span name="reload" onClick=random()>換一張</span>
+
+</body>
+</html>

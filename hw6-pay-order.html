@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HW6-訂單支付</title>
+<meta charset="utf-8">
+<style type="text/css">
+	body {font-family:"微軟正黑體"; background-color: #f2f2f2;}
+	#top {width: 100%; height: 50px;
+		  position:fixed; top: 0px; left: 0px; 
+		  background-color: lightblue; 
+	}
+  #topLeft {height: 50px; line-height: 50px; vertical-align: middle;
+             position: fixed; left:15%;
+  }
+  #topRight {width:130px; height: 50px;
+             position: fixed; right:15%;
+  }
+	#topLoginImg {width: 30px; height: 30px;
+		  		  position:absolute; top: 10px;	 
+	}
+	.topDiv {width: 50px; height: 50px;
+			   line-height:50px; text-align: center;
+			   position: absolute;
+         cursor: pointer;
+	}
+  #topLeft>div {width:50px; height: 50px;
+                background-color: lightgray;
+  }
+
+	#left{width: 15%; 
+		  position:absolute; left: 0px; top: 50px;
+	}
+	#right{width: 15%;
+		   position:absolute; right: 0px; top: 50px;
+	}
+	#center{width: 70%;height:100%; 
+			position:absolute; left:15%; top:50px;
+			background-color: #fcfcfc; z-index:-1;
+	}
+	#popLoginWindow {width: 100%; height:100%; line-height: 100%; text-align: center;
+					 position: fixed; left:0px; top:0px;
+					 background: rgba(0,0,0,0.7); z-index: 1;
+					 display: none;
+	}
+	.btn{cursor: pointer; text-align: center;}
+  input {border-radius: 3px 3px 3px 3px; border: 0px;}
+  .divPay {width: 100%; height: 1500px; display:none;
+  }
+  #divCash {display: initial;}
+  #divForm {width:350px; height:350px; border-radius: 55px 25px 15px 15px;
+            position: absolute; left:50%; margin-left: -175px;
+            background-color:lightblue;
+  }
+</style>
+
+   <script type="text/javascript">
+      var ID = '1';
+      var PWD = '1';
+
+   		function $id(id){
+   			return document.getElementById(id);
+   		}
+   		function goLogin(){
+        if($id('goLogin').innerHTML == '登入'){
+          $id('popLoginWindow').style.display = 'initial';
+        }else{
+          $id('goLogin').innerHTML = '登入';
+          $id('memName').innerHTML = '';
+          $id('topLoginImg').innerHTML = '';
+        }
+   		}
+   		function cancelLogin(){
+   			$id('popLoginWindow').style.display = 'none';
+   		}
+   		function checkLogin(){
+        var memId = document.getElementsByName('memId')[0].value;
+        var memPwd = document.getElementsByName('memPwd')[0].value;
+        if(memId == ID && memPwd == PWD){
+          $id('goLogin').innerHTML = '登出';
+          $id('memName').innerHTML = 'Ryu';
+          $id('topLoginImg').innerHTML = '<img src="./images/dgx.jpg" width="30" height="30">';
+          document.getElementsByName('memId')[0].value = '';
+          document.getElementsByName('memPwd')[0].value = '';
+          cancelLogin();
+        }else{
+          alert('帳密錯誤');
+        }
+   		}
+
+      function change(e){
+        var v = e.target.value;
+        if(v == 'cash'){
+          $id('divCash').style.display = 'initial';
+          $id('divCredit').style.display = 'none';
+          $id('divAtm').style.display = 'none';
+        }
+        if(v == 'creditCard'){
+          $id('divCash').style.display = 'none';
+          $id('divCredit').style.display = 'initial';
+          $id('divAtm').style.display = 'none';
+        } 
+        if(v == 'atm'){
+          $id('divCash').style.display = 'none';
+          $id('divCredit').style.display = 'none';
+          $id('divAtm').style.display = 'initial';
+        }
+      }
+
+   		function init(){
+   			$id('goLogin').onclick = goLogin;
+   			$id('btnLogin').onclick = checkLogin;
+   			$id('btnCancel').onclick = cancelLogin;
+        for(var i=0; i<document.querySelectorAll('.radio').length; i++){
+          document.querySelectorAll('.radio')[i].onclick = change;
+        }	
+   		}
+   		window.onload = init;
+   </script>
+</head>
+
+<body>
+  <div id="top">
+    <div id="topLeft">
+      <div class="btn"><span>首頁</span></div>
+    </div>
+
+    <div id ="topRight">
+     	<div id="topLoginImg"></div>
+     	<div class="topDiv" style="right:50px"><span id="memName"></span></div>
+     	<div class="topDiv" style="right:0px"><span class = "btn" id="goLogin">登入</span></div>
+    </div>
+  </div>
+
+    <div id = "left"></div>
+    <div id = "right"></div>
+
+    <div id = "center">
+      <br><br><br><br>
+      <div id="divForm">
+      <br><br>
+		  <table align="center" border="0" cellpadding="5">
+        <tr><td align="center" colspan="3">訂單資訊</td></tr>
+        <tr>
+          <td colspan="3" align="center">
+            <table>
+              <tr>
+                <td>收件人姓名</td>
+                <td><input type="text" name="fullName" placeholder="請輸入姓名"></td>
+              </tr>
+              <tr>
+              <td>收件人地址</td>
+              <td><input type="text" name="address" placeholder="請輸入地址"></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+          
+        <tr><td colspan="3"><br></td></tr>
+        <tr><td align="center" colspan="3">請選擇付款方式</td></tr>
+        <tr>
+          <td align="center"><input type="radio" name="payMethod" class="radio" value="cash">現金</td>
+          <td align="center"><input type="radio" name="payMethod" class="radio" value="creditCard">信用卡</td>
+          <td align="center"><input type="radio" name="payMethod" class="radio" value="atm">ATM</td>
+        </tr>
+
+        <tr>
+          <td colspan="3">
+            <div class="divPay" id="divCash"></div>
+            <div class="divPay" id="divCredit">
+              <table height="100%" align="center">
+                <tr><td>信用卡號碼</td><td><input type="text" name="cdtNum"></td></tr>
+                <tr><td>到期年月</td><td><input type="month" name="cdtExp"></td></tr>
+              </table>
+            </div>
+            <div class="divPay" id="divAtm">
+              <table height="100%" align="center">
+                <tr><td>銀行代號</td><td><input type="text" name="bankNum"></td></tr>
+                <tr><td>扣款帳號</td><td><input type="text" name="actNum"></td></tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+      </div>
+    </div>
+
+    <div id = "popLoginWindow">
+    	<table width="100%" height="70%">
+    	<tr><td>
+    		<table align="center" cellspacing="0">
+    		<tr><td><input type="text" name="memId" placeholder="帳號 (預設為1)"></td></tr>
+    		<tr><td><input type="password" name="memPwd" placeholder="密碼 (預設為1)"></td></tr>
+    		<tr><td align="center">
+    		<input type="button" name="btnLogin"  class = "btn" id="btnLogin" value="登入">
+    		<input type="button" name="btnCancel" class = "btn" id="btnCancel" value="取消">
+    		</td></tr>
+    		</table>
+    	</td></tr>
+    	</table>
+    </div>
+   
+
+</body>
+</html>
